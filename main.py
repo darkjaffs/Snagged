@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 import html
 import csv
 
-URL = "https://weworkremotely.com/categories/remote-programming-jobs"
-
+URL = "https://weworkremotely.com/remote-jobs.rss"
 
 response = request.get(URL)
 
@@ -20,7 +19,7 @@ with open("page.html", "w", encoding="utf-8") as file:
 
 job_items = soup.find_all("item")
 
-with open("jobs.csv","w", newline="") as csvfile:
+with open("jobs.csv","w", newline="", encoding="utf-8") as csvfile:
     fieldnames = ["Title", "Category", "Link"]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
