@@ -10,7 +10,8 @@ def home():
 @app.route("/jobs", methods=["POST"])
 def jobs():
     selected_category = request.form.get("category")
-    return f"{selected_category}"
+    user_email = request.form.get("email")
+    return selected_category, user_email
 
 
 if __name__ == "__main__":
