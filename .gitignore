@@ -1,4 +1,4 @@
 # Ignore all CSV and HTML files
 *.csv
 page.html
-user.db
+users.db

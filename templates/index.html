@@ -6,18 +6,20 @@
     <title>Snagged</title>
 </head>
 <body>
-    <h1>Select a Category</h1>
-    <form action="/jobs" method="post">
-        <label for="email">Enter your email</label>
-        <input type="email" id="email">
-        <label for="category">Choose a Category</label>
-        <select name="category" id="category">
+    <h2>Subscribe for Job Alerts</h2>
+    <form method="POST">
+        <label>Email:</label>
+        <input type="email" name="email" required>
+        
+        <label>Job Category:</label>
+        <select name="category">
             <option value="Full-Stack Programming">Full-Stack Programming</option>
             <option value="Back-End Programming">Back-End Programming</option>
             <option value="Front-End Programming">Front-End Programming</option>
             <option value="All Programming">All Programming</option>
         </select>
-        <button type="submit">Submit</button>
+
+        <button type="submit">Subscribe</button>
     </form>
 </body>
 </html> 
