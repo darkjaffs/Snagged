@@ -17,7 +17,7 @@ def create_tables():
         title TEXT NOT NULL,
         category TEXT NOT NULL,
         url TEXT UNIQUE NOT NULL,
-        published_date DATETIME DEFAULT CURRENT_TIMESTAMP
+        published_date TEXT NOT NULL
     )
     """)
 
@@ -32,6 +32,19 @@ def create_tables():
 
     conn.commit()
 
+    conn.close()
+
+def insert_jobs(title, category, url, date):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM jobs WHERE url=?", (url,))
+
+    if cursor.fetchone() is None:
+        cursor.execute("INSERT into jobs (title, category, url, published_date) VALUES (?,?,?,?)", (title,category,url,date))
+        conn.commit()
+    
     conn.close()
 
 if __name__ == "__main__":
