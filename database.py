@@ -5,7 +5,6 @@ def create_connection():
     return sqlite3.connect("users.db")
 
 
-
 def create_tables():
     
     conn = create_connection()
@@ -48,7 +47,7 @@ def insert_jobs(title, category, url, date):
     conn.close()
 
 def insert_users(email,category):
-    
+
     conn = create_connection()
     cursor = conn.cursor()
 
@@ -56,9 +55,9 @@ def insert_users(email,category):
         cursor.execute("INSERT into subscribers (email, category) VALUES (?, ?)", (email, category))
         conn.commit()
     except sqlite3.IntegrityError:
-            pass
+        pass
     finally:
-            conn.close()
+        conn.close()
 
 
 if __name__ == "__main__":

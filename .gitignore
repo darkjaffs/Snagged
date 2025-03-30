@@ -2,3 +2,5 @@
 *.csv
 page.html
 users.db
+__pycache__/
+.env
