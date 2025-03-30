@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-import sqlite3
+from database import insert_users
 
 app = Flask(__name__)
 
@@ -9,16 +9,7 @@ def home():
         category = request.form["category"]
         email = request.form["email"]
 
-        conn = sqlite3.connect("users.db")
-        cursor = conn.cursor()
-
-        try:
-            cursor.execute("INSERT into subscribers (email, category) VALUES (?, ?)", (email, category))
-            conn.commit()
-        except sqlite3.IntegrityError:
-            pass
-        finally:
-            conn.close()
+        insert_users(email,category)
 
         return redirect("/")
 

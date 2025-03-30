@@ -47,5 +47,19 @@ def insert_jobs(title, category, url, date):
     
     conn.close()
 
+def insert_users(email,category):
+    
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("INSERT into subscribers (email, category) VALUES (?, ?)", (email, category))
+        conn.commit()
+    except sqlite3.IntegrityError:
+            pass
+    finally:
+            conn.close()
+
+
 if __name__ == "__main__":
     create_tables()
