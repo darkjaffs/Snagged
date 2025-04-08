@@ -58,7 +58,32 @@ def insert_users(email,category):
         pass
     finally:
         conn.close()
+        
+def get_all_subscribers():
+    conn = create_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT email, category FROM subscribers")
+    users = cursor.fetchall()
+    
+    conn.close   
+    return users
 
+def get_jobs_by_categories(category, limit=5):
+    conn = create_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+                   SELECT title,url,published_date FROM jobs
+                   WHERE category=?
+                   ORDER BY published_date DESC
+                   LIMIT ?
+    
+    """, (category, limit))
+    
+    jobs = cursor.fetchall()
+    conn.close()
+    return jobs
 
 if __name__ == "__main__":
     create_tables()
