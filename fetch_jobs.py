@@ -16,49 +16,55 @@ rss_feeds = {
     "Management and Finance": "https://weworkremotely.com/categories/remote-management-and-finance-jobs.rss",
     "Design": "https://weworkremotely.com/categories/remote-design-jobs.rss",
     "Devops and System Admin": "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss",
-    "Others": "https://weworkremotely.com/categories/all-other-remote-jobs.rss"
+    "Others": "https://weworkremotely.com/categories/all-other-remote-jobs.rss",
 }
 
-category = "Full-Stack Programming"
+for category in rss_feeds.keys():
 
-URL = rss_feeds[category]
+    URL = rss_feeds[category]
 
-response = request.get(URL)
+    try:
+        response = request.get(URL)
+        response.raise_for_status()  # raise error if something goes wrong
+    except Exception as e:
+        print(f"Failed to fetch {category}: {e}")
+        continue
 
-rawhtml = response.text
-decoded_html = html.unescape(rawhtml)
+    rawhtml = response.text
+    decoded_html = html.unescape(rawhtml)
 
-soup = BeautifulSoup(decoded_html, "xml")
+    soup = BeautifulSoup(decoded_html, "xml")
 
-with open("page.html", "w", encoding="utf-8") as file:
-    file.write(decoded_html)
+    with open("page.html", "w", encoding="utf-8") as file:
+        file.write(decoded_html)
 
+    job_items = soup.find_all("item")
 
-job_items = soup.find_all("item")
-
-for job in job_items:
+    for job in job_items:
         title = job.find("title").text.strip()
-        category = job.find("category").text.strip()
         url = job.find("guid").text.strip()
         date_str = job.find("pubDate").text.strip()
-        dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")  
-        date = dt.strftime("%d %b %Y") 
+        dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
+        date = dt.strftime("%d %b %Y")
         insert_jobs(title, category, url, date)
 
 
-with open("jobs.csv","w", newline="", encoding="utf-8") as csvfile:
-    fieldnames = ["Title", "Category", "Link", "Date Published"]
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    writer.writeheader()
-    for job in job_items:
-        title = job.find("title").text.strip()
-        category = job.find("category").text.strip()
-        links = job.find("guid").text.strip()
-        date_str = job.find("pubDate").text.strip()
-        dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")  
-        date = dt.strftime("%d %b %Y") 
-        writer.writerow({"Title": title, "Category": category, "Link": links, "Date Published": date})
-
-
-
-
+# with open("jobs.csv", "w", newline="", encoding="utf-8") as csvfile:
+#     fieldnames = ["Title", "Category", "Link", "Date Published"]
+#     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+#     writer.writeheader()
+#     for job in job_items:
+#         title = job.find("title").text.strip()
+#         category = job.find("category").text.strip()
+#         links = job.find("guid").text.strip()
+#         date_str = job.find("pubDate").text.strip()
+#         dt = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
+#         date = dt.strftime("%d %b %Y")
+#         writer.writerow(
+#             {
+#                 "Title": title,
+#                 "Category": category,
+#                 "Link": links,
+#                 "Date Published": date,
+#             }
+#         )
