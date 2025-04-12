@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect
 from database import insert_users
 from dotenv import load_dotenv
 import os
-from email_service import init_mail, mail
+from email_service import init_mail, send_email
 
 load_dotenv() 
 
@@ -28,6 +28,7 @@ def home():
         return redirect("/")
 
     return render_template("index.html")
+
 
 
 

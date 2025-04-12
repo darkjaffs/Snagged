@@ -69,7 +69,7 @@ def get_all_subscribers():
     conn.close   
     return users
 
-def get_jobs_by_categories(category, limit=5):
+def get_jobs_by_categories(category, limit=10):
     conn = create_connection()
     cursor = conn.cursor()
     
