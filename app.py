@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from database import insert_users
+from database import insert_subscribers
 from dotenv import load_dotenv
 import os
 from email_service import init_mail, send_email
@@ -23,7 +23,7 @@ def home():
         category = request.form["category"]
         email = request.form["email"]
 
-        insert_users(email,category)
+        insert_subscribers(email,category)
 
         return redirect("/")
 

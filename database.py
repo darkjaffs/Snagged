@@ -6,7 +6,7 @@ def create_connection():
 
 
 def create_tables():
-    
+    """Create all the table for database if they do not exist"""
     conn = create_connection()
     cursor = conn.cursor()
 
@@ -28,13 +28,22 @@ def create_tables():
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
     )
     """)
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
 
     conn.commit()
 
     conn.close()
 
 def insert_jobs(title, category, url, date):
-
+    """Insert jobs in the database if they do not exist already"""
     conn = create_connection()
     cursor = conn.cursor()
 
@@ -46,7 +55,7 @@ def insert_jobs(title, category, url, date):
     
     conn.close()
 
-def insert_users(email,category):
+def insert_subscribers(email,category):
 
     conn = create_connection()
     cursor = conn.cursor()
@@ -58,6 +67,30 @@ def insert_users(email,category):
         pass
     finally:
         conn.close()
+        
+def insert_users(email,password_hash):
+    
+    conn = create_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("INSERT into users (email, password_hash) VALUES (?, ?)", (email, password_hash))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        pass
+    finally:
+        conn.close()
+        
+def get_user(email):
+    
+    conn = create_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT password_hash FROM users WHERE email=?", (email,))
+    
+    password_hash = cursor.fetchone()
+    conn.close()
+    return password_hash[0]
         
 def get_all_subscribers():
     conn = create_connection()
